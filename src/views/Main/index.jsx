@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
 
 const Main = ({ navigation }) => (
-  <View>
+  <View style={{ backgroundColor: '#555' }}>
     <Text>
       Welcome to Contactor!
       -the greatest app in existance
