@@ -7,7 +7,7 @@ const Main = ({ navigation }) => (
       Welcome to Contactor!
       -the greatest app in existance
     </Text>
-    <TouchableHighlight onPress={navigation.navigate('Contacts')}>
+    <TouchableHighlight onPress={() => navigation.navigate('Contacts')}>
       <Text>
         contacts
       </Text>
