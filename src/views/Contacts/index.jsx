@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, TouchableHighlight, Text } from 'react-native';
 import ContactsList from '../../components/ContactsList';
 import { addContact, getAllContacts } from '../../services/fileService';
 
@@ -7,20 +7,40 @@ class Contacts extends React.Component {
   constructor({ navigation }) {
     super();
     this.state = {
-      contacts: JSON.parse('[{"id": 1,"name": "john doe","phoneNumber": "5812345","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"},{"id": 2,"name": "jane doe","phoneNumber": "5432185","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"},{"id": 3,"name": "john doe","phoneNumber": "5812345","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"},{"id": 4,"name": "jane doe","phoneNumber": "5432185","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"},{"id": 5,"name": "john doe","phoneNumber": "5812345","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"},{"id": 6,"name": "jane doe","phoneNumber": "5432185","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"},{"id": 7,"name": "john doe","phoneNumber": "5812345","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"},{"id": 8,"name": "jane doe","phoneNumber": "5432185","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"},{"id": 9,"name": "john doe","phoneNumber": "5812345","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"},{"id": 10,"name": "jane doe","phoneNumber": "5432185","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"},{"id": 11,"name": "john doe","phoneNumber": "5812345","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"},{"id": 12,"name": "jane doe","phoneNumber": "5432185","photo":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU"}]'),
+      navigation,
+      contacts: [],
+      searchString: '',
     };
   }
 
+  async componentDidMount() {
+    await this.fetchItems();
+  }
 
+  async fetchItems() {
+    const contacts = await getAllContacts();
+    this.setState({ contacts });
+  }
 
   render() {
-    const { contacts, navigation } = this.state;
-    console.log(contacts);
+    const { contacts, navigation, searchString } = this.state;
     return (
-      <View style={{ backgroundColor: '#373d47' }}>
-        <ContactsList navigation={navigation} contacts={contacts} />
+      <View style={{ backgroundColor: '#373d47', flex: 1 }}>
+        <TouchableHighlight onPress={() => addContact({ name: 'john doe', phoneNumber: '5812345', photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU' })}>
+          <Text>
+            add
+          </Text>
+        </TouchableHighlight>
+        <View style={{ backgroundColor: '#373d47' }}>
+          <ContactsList
+            navigation={navigation}
+            instance={this}
+            contacts={contacts.filter(
+              (x) => x.name.toString().toLowerCase().indexOf(searchString.toLowerCase()) !== -1
+            )}
+          />
+        </View>
       </View>
-
     );
   }
 }

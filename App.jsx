@@ -3,6 +3,6 @@ import AppContainer from './src/routes';
 
 export default function App() {
   return (
-    <AppContainer />
+    <AppContainer style={{ backgroundColor: '#555' }} />
   );
 }
