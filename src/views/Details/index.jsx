@@ -1,24 +1,27 @@
 import React from 'react';
 import { View, TouchableHighlight, Text, Image } from 'react-native';
 import styles from './styles';
-import { addContact , deleteContact } from '../../services/fileService';
+import { addContact, deleteContact } from '../../services/fileService';
+import EditModal from '../../components/EditModal';
+
 
 export default class Details extends React.Component {
   constructor({ navigation }) {
     super();
-    console.log(navigation.state.params)
     const { contacts, id, instance } = navigation.state.params
-    console.log(contacts.findIndex((x) => x.id === id))
     this.state = {
       contact: contacts[contacts.findIndex((x) => x.id === id)],
       contacts,
       navigation,
       instance,
+      isEditModalOpen: false,
     }
   }
 
   render() {
-    const { contact, contacts, navigation, instance } = this.state;
+    const {
+      contact, contacts, navigation, instance, isEditModalOpen,
+    } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.imageContainer}>
@@ -30,7 +33,7 @@ export default class Details extends React.Component {
         <Text style={styles.name}>{contact.name}</Text>
         <Text style={styles.number}>{contact.phoneNumber}</Text>
         <View style={styles.buttonsContainer}>
-          <TouchableHighlight onPress={() => { deleteContact(contact); contact.name = 'palli'; addContact(contact); instance.setState({ yes: 'yes' }); navigation.navigate('Details', { contacts, id: contact.id }); }} style={styles.button}>
+          <TouchableHighlight onPress={() => this.setState({ isEditModalOpen: true })} style={styles.button}>
             <Text style={styles.buttonText}>
               Edit
             </Text>
@@ -41,6 +44,15 @@ export default class Details extends React.Component {
             </Text>
           </TouchableHighlight>
         </View>
+        <EditModal
+          isOpen={isEditModalOpen}
+          closeModal={() => this.setState({ isEditModalOpen: false })}
+          add={(contact) => addContact(contact)}
+          contact={contact}
+          contactsInstance={instance}
+          navigation={navigation}
+          instance={this}
+        />
       </View>
     );
   }

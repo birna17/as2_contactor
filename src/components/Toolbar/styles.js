@@ -5,7 +5,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 70,
+    height: 40,
     backgroundColor: '#ced3db',
   },
   toolbarAction: {

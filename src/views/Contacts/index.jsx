@@ -39,7 +39,6 @@ class Contacts extends React.Component {
   }
 
   addContact(contact) {
-    console.log('hello')
     addContact(contact);
     const { contacts } = this.state;
     this.setState({
@@ -53,22 +52,24 @@ class Contacts extends React.Component {
     } = this.state;
     return (
       <View style={{ backgroundColor: '#373d47', flex: 1 }}>
-        <Toolbar onAdd={() => this.setState({ isAddModalOpen: true })} />
-        <TouchableHighlight onPress={() => addContact({ name: 'john doe', phoneNumber: '5812345', photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU' })}>
-          <Text>
-            add
-          </Text>
-        </TouchableHighlight>
+        <Toolbar
+          onAdd={() => this.setState({ isAddModalOpen: true })}
+          handleChange={(text) => this.setState({ searchString: text })}
+        />
         <View style={{ backgroundColor: '#373d47' }}>
           <ContactsList
             navigation={navigation}
             instance={this}
             contacts={contacts.sort((a, b) => a.name > b.name).filter(
-              (x) => x.name.toString().toLowerCase().indexOf(searchString.toLowerCase()) !== -1
+              (x) => x.name.toString().toLowerCase().indexOf(searchString.toLowerCase()) !== -1,
             )}
           />
         </View>
-        <AddModal isOpen={isAddModalOpen} closeModal={() => this.setState({ isAddModalOpen: false })} add={(contact) => this.addContact(contact)} />
+        <AddModal
+          isOpen={isAddModalOpen}
+          closeModal={() => this.setState({ isAddModalOpen: false })}
+          add={(contact) => this.addContact(contact)}
+        />
       </View>
     );
   }
