@@ -2,6 +2,8 @@ import React from 'react';
 import { View, TouchableHighlight, Text } from 'react-native';
 import ContactsList from '../../components/ContactsList';
 import { addContact, getAllContacts } from '../../services/fileService';
+import AddModal from '../../components/AddModal';
+import Toolbar from '../../components/Toolbar';
 
 class Contacts extends React.Component {
   constructor({ navigation }) {
@@ -10,6 +12,7 @@ class Contacts extends React.Component {
       navigation,
       contacts: [],
       searchString: '',
+      isAddModalOpen: false,
     };
   }
 
@@ -19,13 +22,38 @@ class Contacts extends React.Component {
 
   async fetchItems() {
     const contacts = await getAllContacts();
-    this.setState({ contacts });
+    const seen = {};
+    const filtered = [];
+    const len = contacts.length;
+    let j = 0;
+    for (let i = 0; i < len; i++) {
+      const item = contacts[i];
+      if (seen[item.id] !== 1 && seen[item.name + item.phoneNumber] !== 1) {
+        seen[item.id] = 1;
+        seen[item.name + item.phoneNumber] = 1;
+        filtered[j++] = item;
+      }
+    }
+    console.log(filtered)
+    this.setState({ contacts: filtered });
+  }
+
+  addContact(contact) {
+    console.log('hello')
+    addContact(contact);
+    const { contacts } = this.state;
+    this.setState({
+      contacts: [...contacts, contact],
+    });
   }
 
   render() {
-    const { contacts, navigation, searchString } = this.state;
+    const {
+      contacts, navigation, searchString, isAddModalOpen,
+    } = this.state;
     return (
       <View style={{ backgroundColor: '#373d47', flex: 1 }}>
+        <Toolbar onAdd={() => this.setState({ isAddModalOpen: true })} />
         <TouchableHighlight onPress={() => addContact({ name: 'john doe', phoneNumber: '5812345', photo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMFIMiSwX_AlzPot4VJ7JeYb1OWR6IcbIlPA&usqp=CAU' })}>
           <Text>
             add
@@ -35,11 +63,12 @@ class Contacts extends React.Component {
           <ContactsList
             navigation={navigation}
             instance={this}
-            contacts={contacts.filter(
+            contacts={contacts.sort((a, b) => a.name > b.name).filter(
               (x) => x.name.toString().toLowerCase().indexOf(searchString.toLowerCase()) !== -1
             )}
           />
         </View>
+        <AddModal isOpen={isAddModalOpen} closeModal={() => this.setState({ isAddModalOpen: false })} add={(contact) => this.addContact(contact)} />
       </View>
     );
   }
