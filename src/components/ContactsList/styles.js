@@ -23,4 +23,23 @@ export default StyleSheet.create({
     fontSize: 35,
     marginTop: 5,
   },
+  callButtonContainer: {
+    position: 'absolute',
+    top: 20,
+    right: 15,
+  },
+  button: {
+    marginRight: 10,
+    marginLeft: 10,
+    width: 64,
+    borderWidth: 1,
+    borderColor: '#ced3db',
+    backgroundColor: '#50545c',
+  },
+  buttonText: {
+    fontSize: 18,
+    color: '#ced3db',
+    padding: 5,
+    alignSelf: 'center',
+  },
 });

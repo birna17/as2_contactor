@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Linking from 'expo-linking';
 import {
   View, FlatList, Text, Image, TouchableHighlight,
 } from 'react-native';
@@ -11,7 +12,7 @@ const ContactsList = ({
     <FlatList
       numColumns={1}
       data={contacts}
-      renderItem={({ item: { name, id, photo } }) => (
+      renderItem={({ item: { name, id, phoneNumber, photo } }) => (
         <TouchableHighlight onPress={() => navigation.navigate('Details', { id, contacts, instance })}>
           <View style={styles.container}>
             <Image
@@ -23,6 +24,11 @@ const ContactsList = ({
                 {name}
               </Text>
             </View>
+            <TouchableHighlight style={[styles.callButtonContainer, styles.button]} onPress={() => Linking.openURL(`tel:${phoneNumber}`)} >
+              <Text style={styles.buttonText}>
+                call
+              </Text>
+            </TouchableHighlight>
           </View>
         </TouchableHighlight>
 

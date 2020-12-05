@@ -17,7 +17,9 @@ const Toolbar = ({ onAdd, searchString, handleChange }) => (
     </View>
     <TextInput
       value={searchString}
-      style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+      placeholder="search"
+      placeholderTextColor="gray"
+      style={{ height: 40, borderColor: 'gray', borderWidth: 1, color: '#fff' }}
       type="text"
       onChangeText={(text) => handleChange(text)}
     />

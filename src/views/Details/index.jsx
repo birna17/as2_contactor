@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TouchableHighlight, Text, Image } from 'react-native';
+import * as Linking from 'expo-linking';
 import styles from './styles';
 import { addContact, deleteContact } from '../../services/fileService';
 import EditModal from '../../components/EditModal';
@@ -33,6 +34,11 @@ export default class Details extends React.Component {
         <Text style={styles.name}>{contact.name}</Text>
         <Text style={styles.number}>{contact.phoneNumber}</Text>
         <View style={styles.buttonsContainer}>
+          <TouchableHighlight style={[styles.callButtonContainer, styles.button]} onPress={() => Linking.openURL(`tel:${contact.phoneNumber}`)} >
+            <Text style={styles.buttonText}>
+              call
+            </Text>
+          </TouchableHighlight>
           <TouchableHighlight onPress={() => this.setState({ isEditModalOpen: true })} style={styles.button}>
             <Text style={styles.buttonText}>
               Edit
